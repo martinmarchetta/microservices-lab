@@ -1,0 +1,63 @@
+from flask import Flask
+from flask import jsonify
+from flask import request
+
+app = Flask(__name__)
+
+# Health check endpoint
+@app.route("/health-check", methods=['GET'])
+def health_check():
+    return "ok", 200
+
+# Misc controller endpoints
+@app.route("/mensaje/<mensaje>", methods=['POST'])
+def retornar_mensaje(mensaje: str):
+    return jsonify({
+        "status": "ok",
+        "mensaje": f"Me llego este mensaje: '{mensaje}'"
+    }), 200
+
+@app.route("/headers", methods=['GET'])
+def retornar_headers_get():
+    return jsonify(dict(request.headers)), 200
+
+@app.route("/headers", methods=['POST'])
+def retornar_headers_post():
+    headers = request.headers
+    payload = None
+    http_response_code = 0
+    if headers['Accept'] == 'application/json':
+        payload = jsonify({
+            'status': 'ok',
+            'data': [
+                {
+                'id': 1,
+                'description': 'Primer dato'
+                },
+                {
+                'id': 2,
+                'description': 'Segundo dato'
+                },
+                {
+                'id': 3,
+                'description': 'Tercer dato'
+                }
+            ]
+        })
+        http_response_code = 200
+    else:
+        payload = f"Return content type {headers['Accept']} is not supported"
+        http_response_code = 406
+
+    return payload, http_response_code
+
+################
+# ERROR HANDLING
+################
+@app.errorhandler(Exception)
+def handle_all_errors(exception):
+    return {
+        "code": exception.code,
+        "name": exception.name,
+        "description": exception.description
+    }, 500

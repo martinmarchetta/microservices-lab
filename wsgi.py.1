@@ -1,0 +1,40 @@
+from flask import Flask
+# from flask import jsonify
+
+app = Flask(__name__)
+
+# Health check endpoint
+@app.route("/health-check", methods=['GET'])
+def health_check():
+    return "ok", 200
+
+# Misc controller endpoints
+# @app.route("/mensaje/<mensaje>", methods=['POST'])
+# def retornar_mensaje(mensaje: str):
+#     # return f"Me llego este mensaje: <p><b>'{mensaje}'</b></p>"
+
+# @app.route("/mensaje/<mensaje>", methods=['POST'])
+# def retornar_mensaje(mensaje: str):
+#     # return f"Me llego este mensaje: <p><b>'{mensaje}'</b></p>"
+#     return jsonify({
+#         "status": "ok",
+#         "mensaje": f"Me llego este mensaje: '{mensaje}'"
+#     }), 200
+
+
+################
+# ERROR HANDLING
+################
+
+#  #@app.errorhandler(404)
+# def handle_not_found_error(error):
+#     return "No se encontro el recurso", 404
+ 
+
+# @app.errorhandler(Exception)
+# def handle_all_errors(exception):
+#     return {
+#         "code": exception.code,
+#         "name": exception.name,
+#         "description": exception.description
+#     }, 500
